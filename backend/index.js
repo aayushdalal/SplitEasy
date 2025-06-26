@@ -5,8 +5,7 @@ const { calculateSettlements } = require('./algorithm/splitwise');
 
 // Initialize the app
 const app = express();
-const PORT = 8080; // We can use the same port as before
-
+const PORT = process.env.PORT;
 // Middleware
 app.use(cors()); // Allows requests from your frontend
 app.use(express.json()); // Allows the server to understand JSON from request bodies
