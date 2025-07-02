@@ -2,17 +2,24 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const { calculateSettlements } = require('./algorithm/splitwise');
-
+const bodyParser = require('body-parser');
+const mailRoute = require('./routes/mail');
 // Initialize the app
 const app = express();
 const PORT = process.env.PORT ||8080;
 // Middleware
-app.use(cors()); // Allows requests from your frontend
+app.use(cors({
+  origin: '*', // Allow all origins (or replace with specific origin for security)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json()); // Allows the server to understand JSON from request bodies
-
+app.use(bodyParser.json());
+app.use('/api', mailRoute);
 // --- Our In-Memory Database ---
 // This is just an array that will reset every time the server restarts.
 // It's perfect for now.
+
 let transactions = [];
 
 // --- API ROUTES ---
