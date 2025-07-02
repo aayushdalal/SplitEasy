@@ -166,7 +166,7 @@ function TransactionForm() {
             disabled={status === 'loading' || localTransactions.length === 0}
             className="btn btn-success flex-fill"
           >
-            {status === 'loading' ? 'Calculating...' : 'Calculate Settlement'}
+            {status === 'loading' ? 'Calculating...(loading backend from render takes time, will imrpove soon by nextjs)' : 'Calculate Settlement'}
           </button>
           <button
             onClick={handleClear}
