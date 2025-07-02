@@ -1,4 +1,3 @@
-// src/components/SettlementResults.jsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearLocal } from '../features/transactions/transactionSlice';
@@ -12,43 +11,82 @@ function SettlementResults() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-2xl">
-        <header className="text-center mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900">Final Settlements</h1>
-          <p className="mt-2 text-lg text-slate-600">Here's the simplest way to settle all the group debts.</p>
-        </header>
-        
-        <div className="bg-white shadow-2xl rounded-xl p-6 sm:p-8 mb-8">
-          <div className="space-y-5">
+    <div
+      className="position-relative"
+      style={{
+        minHeight: '100vh',
+        backgroundImage: 'url("/images/settle.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Dark overlay */}
+      <div
+        className="position-absolute top-0 start-0 w-100 h-100"
+        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+      ></div>
+
+      {/* Main content */}
+      <div
+        className="position-relative container py-5 d-flex justify-content-center align-items-center"
+        style={{ minHeight: '100vh', zIndex: 1 }}
+      >
+        <div
+          className="p-4 rounded shadow w-100"
+          style={{
+            maxWidth: '600px',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          }}
+        >
+          <h1 className="text-center fw-bold text-dark mb-3">
+            Final Settlements
+          </h1>
+          <p className="text-center text-muted mb-4">
+            Here's the simplest way to settle all the group debts.
+          </p>
+
+          <div>
             {settlements.length === 0 ? (
-              <p className="text-center text-slate-500 py-8 text-lg">🎉 All debts are settled! 🎉</p>
+              <p className="text-center fs-5 text-success">
+                🎉 All debts are settled! 🎉
+              </p>
             ) : (
-              settlements.map((s, index) => (
-                 <div
-                   key={index}
-                   className="p-5 bg-gradient-to-br from-slate-100 to-white rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md border border-slate-200 hover:shadow-lg transition-shadow"
-                 >
-                   <div className="text-center sm:text-left flex items-center gap-2">
-                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                     <span className="font-bold text-lg text-red-600">{s.from}</span>
-                     <span className="mx-2 text-slate-500 text-xl">→</span>
-                     <span className="font-bold text-lg text-blue-700">{s.to}</span>
-                   </div>
-                   <div className="bg-green-100 text-green-800 font-bold text-xl py-2 px-6 rounded-full shadow-inner border border-green-200">
-                     ${s.amount.toFixed(2)}
-                   </div>
-                 </div>
-               ))
+              <div className="list-group">
+                {settlements.map((s, index) => (
+                  <div
+                    key={index}
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row justify-content-between align-items-center text-center text-sm-start"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '500',
+                      backgroundColor: 'rgba(255,255,255,0.95)',
+                    }}
+                  >
+                    <div className="mb-2 mb-sm-0">
+                      <span className="fw-bold text-danger">{s.from}</span>
+                      <span className="mx-2 text-dark">→</span>
+                      <span className="fw-bold text-primary">{s.to}</span>
+                    </div>
+                    <span className="badge bg-success fs-5 px-4 py-2">
+                      Rs {s.amount.toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-        </div>
 
-        <button onClick={handleResettle} className="w-full bg-blue-600 text-white font-semibold p-3 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-          Settle New Expenses (Start Over)
-        </button>
+          <button
+            onClick={handleResettle}
+            className="btn btn-primary mt-4 w-100"
+          >
+            Settle New Expenses (Start Over)
+          </button>
+        </div>
       </div>
     </div>
   );
 }
+
 export default SettlementResults;

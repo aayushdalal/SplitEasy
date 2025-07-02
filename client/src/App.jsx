@@ -10,9 +10,12 @@ function App() {
   // Set the global background and font for the entire app.
   // The 'font-sans' class will apply the 'Inter' font we just configured.
   return (
-    <main className="min-h-screen bg-slate-50 font-sans text-slate-800">
-      {view === 'form' ? <TransactionForm /> : <SettlementResults />}
-    </main>
+    <main className="min-vh-100 bg-light text-dark ">
+      <div className="container-fluid">
+     {view === 'form' ? <TransactionForm /> : <SettlementResults />}
+     </div>
+     </main>
+
   );
 }
 
