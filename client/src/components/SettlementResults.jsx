@@ -8,7 +8,7 @@ function SettlementResults() {
 
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [emailMap, setEmailMap] = useState({});
-  const [upiId, setUpiId] = useState('');
+  const [upiMap, setUpiMap] = useState({});
 
   const handleResettle = () => {
     dispatch(clearLocal());
@@ -19,10 +19,10 @@ function SettlementResults() {
   const handleSendEmails = async () => {
     const participants = Object.entries(emailMap).map(([name, email]) => ({ name, email }));
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/send-settlements`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/send-settlements`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ participants, settlements, upiId }),
+      body: JSON.stringify({ participants, settlements, upiMap }),
     });
 
     const data = await res.json();
@@ -41,28 +41,21 @@ function SettlementResults() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* Dark overlay */}
-      <div
-        className="position-absolute top-0 start-0 w-100 h-100"
-        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-      ></div>
+      {/* Overlay */}
+      <div className="position-absolute top-0 start-0 w-100 h-100" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}></div>
 
-      {/* Main content */}
+      {/* Main Content */}
       <div className="position-relative container py-5 d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
         <div
           className="bg-light bg-opacity-75 p-4 rounded shadow w-100"
           style={{ maxWidth: '700px', backgroundColor: 'rgba(255,255,255,0.9)' }}
         >
           <h1 className="text-center fw-bold text-dark mb-3">Final Settlements</h1>
-          <p className="text-center text-muted">
-            Here's the simplest way to settle all the group debts.
-          </p>
+          <p className="text-center text-muted">Here's the simplest way to settle all the group debts.</p>
 
           <div className="mt-4">
             {settlements.length === 0 ? (
-              <p className="text-center fs-5 text-success">
-                🎉 All debts are settled! 🎉
-              </p>
+              <p className="text-center fs-5 text-success">🎉 All debts are settled! 🎉</p>
             ) : (
               <div className="list-group">
                 {settlements.map((s, index) => (
@@ -115,19 +108,21 @@ function SettlementResults() {
               </div>
             ))}
 
-            <div className="mb-3">
-              <label className="fw-bold">UPI ID or Phone Number for Payment</label>
-              <input
-                type="text"
-                placeholder="Enter UPI ID or Phone"
-                value={upiId}
-                onChange={(e) => setUpiId(e.target.value)}
-                className="form-control"
-                required
-              />
-            </div>
+            <h5 className="mt-4 text-center">Enter UPI IDs of Recipients</h5>
+            {uniqueNames.map((name) => (
+              <div key={name} className="mb-2">
+                <label className="fw-bold">{name}</label>
+                <input
+                  type="text"
+                  placeholder="Enter UPI ID for recipient"
+                  value={upiMap[name] || ''}
+                  onChange={(e) => setUpiMap({ ...upiMap, [name]: e.target.value })}
+                  className="form-control"
+                />
+              </div>
+            ))}
 
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between mt-3">
               <button onClick={handleSendEmails} className="btn btn-primary w-50 me-2">
                 Send Emails
               </button>
