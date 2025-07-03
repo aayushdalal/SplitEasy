@@ -12,29 +12,34 @@ const transporter = nodemailer.createTransport({
 });
 
 router.post('/send-settlements', async (req, res) => {
-  const { participants, settlements, upiId } = req.body;
+  const { participants, settlements, upiMap } = req.body;
 
   try {
-    for (const { name, email } of participants) {
-      const dues = settlements
-        .filter(s => s.from === name)
-        .map(s => `Pay ₹${s.amount} to ${s.to}`)
-        .join('\n');
+    const emailMap = {};
+    participants.forEach(({ name, email }) => {
+      emailMap[name] = email;
+    });
+
+    for (const { from, to, amount } of settlements) {
+      const toUpi = upiMap[to] || 'No UPI ID provided';
+      const toEmail = emailMap[from]; // email should go to sender
+
+      if (!toEmail) continue;
 
       const mailOptions = {
         from: process.env.MAIL_USER,
-        to: email,
-        subject: 'SplitEasy Settlement Summary',
-        text: `${name},\n\nHere’s what you owe:\n${dues}\n\nPay via UPI: ${upiId}\n\nThanks,\nSplitEasy`,
+        to: toEmail,
+        subject: 'SplitEasy: Payment Due',
+        text: `${from},\n\nYou owe ₹${amount} to ${to}.\n\nPay via UPI: ${toUpi}\n\nThanks,\nSplitEasy`,
       };
 
       await transporter.sendMail(mailOptions);
     }
 
-    res.status(200).json({ success: true, message: "Emails sent successfully!" });
+    res.status(200).json({ success: true, message: 'Emails sent successfully!' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Failed to send emails." });
+    console.error('Error sending email:', err);
+    res.status(500).json({ success: false, message: 'Failed to send emails.' });
   }
 });
 
