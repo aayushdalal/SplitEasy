@@ -1,6 +1,7 @@
 # SplitEasy – Group Expense Management Platform
 
 [Live Site](https://spliteasyyy.netlify.app/) 
+[Watch Demo](https://drive.google.com/file/d/18WeA6XIELN0O_xzkHAdnF7VkysrkmHEf/view?usp=sharing)
 
 SplitEasy is a full-stack web application that simplifies group debt settlement by minimizing the number of transactions required to settle complex shared expenses. It is ideal for use cases like trips, events, or shared living expenses. It works on custom greedy graph algorithm to compute net balances and optimize transactions between users (e.g., trip, event, or roommate expenses). 
 
